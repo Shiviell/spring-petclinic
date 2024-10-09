@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-db-{{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-db
+  template:
+    metadata:
+      labels:
+        app: myapp-db
+    spec:
+      containers:
+        - name: myapp-db
+          image: {{ .Values.containers.image_db }}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: {{ .Values.db.rootPassword }}
+            - name: MYSQL_USER
+              value: {{ .Values.db.user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.db.password }}
+            - name: MYSQL_DATABASE
+              value: {{ .Values.db.database }}
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: {{ .Values.db.empty }}
+          ports:
+            - containerPort: {{ {{ .Values.containers.db_port }} }}

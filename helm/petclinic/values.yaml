@@ -1,0 +1,17 @@
+containers:
+  image_app: "shivi2021/petclinic:latest"
+  app_port: 8080
+  image_db: "mysql:5.7"
+  db_port: 3306
+svc:
+  app_name: "myapp-svc"
+  db_name: "myapp-db-svc"
+  app_port: 80
+  db_port: 3306
+  type: "LoadBalancer"
+db:
+  rootPassword: ""
+  user: "petclinic"
+  password: "petclinic"
+  database: "petclinic"
+  empty: "true"

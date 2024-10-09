@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.svc.db_name }}
+spec:
+  selector:
+    app: myapp-db
+  ports:
+    - protocol: TCP
+      port: {{ .Values.svc.db_port }}
+      targetPort: {{ .Values.containers.db_port }}
+  type: {{ .Values.svc.type }}
+

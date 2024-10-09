@@ -1,0 +1,25 @@
+# Step: Build the artifact using Maven
+FROM openjdk:17-jdk-slim AS build
+
+
+#RUN mvn clean package -DskipTests
+
+# Second stage: Run SonarQ AS sonarscan
+WORKDIR /app
+COPY . .
+RUN mvn sonar:sonar -Dsonar.projectKey=spring-petclinic \
+    -Dsonar.host.url=http://sonarqube:9000 \
+    -Dsonar.login=squ_d5f52d265fb70802107bebe03571e67e1d116220 || echo "SonarQube scan failed, but continuing build."
+Run ./mvnw package
+# Final stage: Run the application
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar /code/app.jar
+EXPOSE 8080
+
+
+#COPY --from=build /usr/src/app/target/*.jar /code/app.jar
+
+# Set the command to run the application
+CMD ["java", "-jar", "/code/app.jar"]
+
